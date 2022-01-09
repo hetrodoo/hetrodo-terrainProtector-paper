@@ -147,11 +147,8 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onWorldSave(WorldSaveEvent event) {
-        TerrainProtector.CLAIM_MANAGER.Save();
-    }
-
-    @EventHandler
-    public void onWorldLoad(WorldLoadEvent event) {
-        TerrainProtector.CLAIM_MANAGER.Load();
+        if (event.getWorld().getName().equals("World")) {
+            TerrainProtector.CLAIM_MANAGER.Save();
+        }
     }
 }
