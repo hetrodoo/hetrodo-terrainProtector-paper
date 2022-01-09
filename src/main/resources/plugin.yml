@@ -1,0 +1,4 @@
+name: TerrainProtector
+version: '${project.version}'
+main: dev.hetrodo.terrainprotector.TerrainProtector
+api-version: 1.16
