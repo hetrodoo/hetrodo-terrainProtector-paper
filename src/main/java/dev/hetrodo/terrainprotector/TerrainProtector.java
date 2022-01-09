@@ -10,13 +10,11 @@ public final class TerrainProtector extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
         Bukkit.getServer().getPluginManager().registerEvents(new EventListener(), this);
-        CLAIM_MANAGER.Load();
     }
 
     @Override
     public void onDisable() {
-        CLAIM_MANAGER.Save();
+
     }
 }

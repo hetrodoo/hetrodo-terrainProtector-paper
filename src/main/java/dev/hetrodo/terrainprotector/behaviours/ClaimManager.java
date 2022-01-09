@@ -183,6 +183,8 @@ public class ClaimManager {
             e.printStackTrace();
         }
 
+        AtomicInteger failCount = new AtomicInteger();
+
         this.areas.forEach(area -> {
             YamlConfiguration areaData = new YamlConfiguration();
             areaData.set("owner", area.owner);
@@ -218,8 +220,19 @@ public class ClaimManager {
                 areaData.save("plugins/TerrainProtector/" + this.areas.indexOf(area) + ".yml");
             } catch (IOException e) {
                 e.printStackTrace();
+                failCount.getAndIncrement();
             }
         });
+
+        int totalCount = areas.size() - failCount.get();
+
+        if (totalCount > 1) {
+            System.out.println("[TerrainProtector]: " + totalCount + " areas were saved.");
+        } else if (totalCount == 1) {
+            System.out.println("[TerrainProtector]: " + totalCount + " area was saved.");
+        } else if (totalCount == 0) {
+            System.out.println("[TerrainProtector]: No area was saved.");
+        }
     }
 
     public void Load() {
@@ -230,6 +243,7 @@ public class ClaimManager {
 
             areas.clear();
             System.out.println("[TerrainProtector]: Found " + count + " area(s).");
+            int failCount = 0;
 
             for (int i = 0; i < count; i++) {
                 try {
@@ -271,11 +285,21 @@ public class ClaimManager {
                         newArea.oldBlockList.add(new OldBlock(material, new Vector3(positionX, positionY, positionZ)));
                     }
 
-                    System.out.println("[TerrainProtector]: An area from " + owner + " was loaded.");
                     areas.add(newArea);
                 } catch (IOException | InvalidConfigurationException e) {
                     e.printStackTrace();
+                    failCount++;
                 }
+            }
+
+            int totalCount = count - failCount;
+
+            if (totalCount > 1) {
+                System.out.println("[TerrainProtector]: " + totalCount + " areas were loaded.");
+            } else if (totalCount == 1) {
+                System.out.println("[TerrainProtector]: " + totalCount + " area was loaded.");
+            } else if (totalCount == 0) {
+                System.out.println("[TerrainProtector]: No area was loaded.");
             }
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();

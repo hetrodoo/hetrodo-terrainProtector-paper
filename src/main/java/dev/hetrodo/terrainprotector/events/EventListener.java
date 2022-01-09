@@ -14,6 +14,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -141,5 +143,15 @@ public class EventListener implements Listener {
 
         double distance = TerrainProtector.CLAIM_MANAGER.NearestAreaDistance(position);
         event.setCancelled(distance < 16);
+    }
+
+    @EventHandler
+    public void onWorldSave(WorldSaveEvent event) {
+        TerrainProtector.CLAIM_MANAGER.Save();
+    }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        TerrainProtector.CLAIM_MANAGER.Load();
     }
 }
