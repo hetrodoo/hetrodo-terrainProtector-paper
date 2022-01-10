@@ -1,5 +1,7 @@
 package dev.hetrodo.terrainprotector.dataTypes.classes;
 
+import org.bukkit.block.Block;
+
 import java.io.Serializable;
 
 public class Vector3 implements Serializable {
@@ -11,6 +13,10 @@ public class Vector3 implements Serializable {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public static Vector3 FromBlock (Block block) {
+        return new Vector3(block.getX(), block.getY(), block.getZ());
     }
 
     public Vector3 add(int x, int y, int z) {

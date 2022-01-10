@@ -5,12 +5,14 @@ import dev.hetrodo.terrainprotector.dataTypes.enums.MsgType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 public class Util {
-    private static final String Prefix = "[TerrainProtector]";
+    public static final String Prefix = "[TerrainProtector]";
     public static final UUID NIL_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     public static void SendToPlayer(Player player, MsgType type, String text) {
@@ -47,5 +49,19 @@ public class Util {
                 }
             }
         }.runTaskLater(TerrainProtector.Instance, delay);
+    }
+
+    public static <T> T Or(Supplier<@Nullable T> v0, Supplier<@Nullable T> v1) {
+        @Nullable T value = v0.get();
+
+        if (value == null) {
+            value = v1.get();
+        }
+
+        return value;
+    }
+
+    public static <T> void Println(T x) {
+        System.out.println(Prefix + " " + x);
     }
 }

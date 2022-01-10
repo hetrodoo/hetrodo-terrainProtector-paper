@@ -1,5 +1,6 @@
 package dev.hetrodo.terrainprotector.behaviours;
 
+import dev.hetrodo.terrainprotector.TerrainProtector;
 import dev.hetrodo.terrainprotector.dataTypes.classes.Area;
 import dev.hetrodo.terrainprotector.dataTypes.classes.OldBlock;
 import dev.hetrodo.terrainprotector.dataTypes.classes.Vector3;
@@ -170,7 +171,7 @@ public class ClaimManager {
 
         return areas.stream().noneMatch(area -> {
             if (area.owner.equals(uuid)) claimCount.incrementAndGet();
-            return newArea.isInside(area.a) || newArea.isInside(area.b) || claimCount.get() >= 5;
+            return newArea.isInside(area.a) || newArea.isInside(area.b) || claimCount.get() >= TerrainProtector.CONFIG_SUPPLIER.MaxClaims.get();
         });
     }
 
@@ -178,7 +179,7 @@ public class ClaimManager {
         try {
             YamlConfiguration countData = new YamlConfiguration();
             countData.set("count", areas.size());
-            countData.save("plugins/TerrainProtector/count.yml");
+            countData.save("plugins/TerrainProtector/data/count.yml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,7 +218,7 @@ public class ClaimManager {
             });
 
             try {
-                areaData.save("plugins/TerrainProtector/" + this.areas.indexOf(area) + ".yml");
+                areaData.save("plugins/TerrainProtector/data/" + this.areas.indexOf(area) + ".yml");
             } catch (IOException e) {
                 e.printStackTrace();
                 failCount.getAndIncrement();
@@ -227,28 +228,28 @@ public class ClaimManager {
         int totalCount = areas.size() - failCount.get();
 
         if (totalCount > 1) {
-            System.out.println("[TerrainProtector]: " + totalCount + " areas were saved.");
+            Util.Println(totalCount + " areas were saved.");
         } else if (totalCount == 1) {
-            System.out.println("[TerrainProtector]: " + totalCount + " area was saved.");
+            Util.Println(totalCount + " area was saved.");
         } else if (totalCount == 0) {
-            System.out.println("[TerrainProtector]: No area was saved.");
+            Util.Println("No area was saved.");
         }
     }
 
     public void Load() {
         try {
             YamlConfiguration countData = new YamlConfiguration();
-            countData.load("plugins/TerrainProtector/count.yml");
+            countData.load("plugins/TerrainProtector/data/count.yml");
             int count = countData.getInt("count");
 
             areas.clear();
-            System.out.println("[TerrainProtector]: Found " + count + " area(s).");
+            Util.Println("Found " + count + " area(s).");
             int failCount = 0;
 
             for (int i = 0; i < count; i++) {
                 try {
                     YamlConfiguration areaData = new YamlConfiguration();
-                    areaData.load("plugins/TerrainProtector/" + i + ".yml");
+                    areaData.load("plugins/TerrainProtector/data/" + i + ".yml");
 
                     String owner = areaData.getString("owner");
 
@@ -287,7 +288,9 @@ public class ClaimManager {
 
                     areas.add(newArea);
                 } catch (IOException | InvalidConfigurationException e) {
-                    e.printStackTrace();
+                    if (e instanceof InvalidConfigurationException)
+                        e.printStackTrace();
+
                     failCount++;
                 }
             }
@@ -295,14 +298,15 @@ public class ClaimManager {
             int totalCount = count - failCount;
 
             if (totalCount > 1) {
-                System.out.println("[TerrainProtector]: " + totalCount + " areas were loaded.");
+                Util.Println(totalCount + " areas were loaded.");
             } else if (totalCount == 1) {
-                System.out.println("[TerrainProtector]: " + totalCount + " area was loaded.");
+                Util.Println(totalCount + " area was loaded.");
             } else if (totalCount == 0) {
-                System.out.println("[TerrainProtector]: No area was loaded.");
+                Util.Println("No area was loaded.");
             }
         } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
+            if (e instanceof InvalidConfigurationException)
+                e.printStackTrace();
         }
     }
 }

@@ -16,7 +16,6 @@ The terrain Protector is a paper plugin that protects a user defined area, no on
 - **_To remove, do the same process with the paper again_**
 
 ## Known Issues
-- If there is only one area, and it gets disbanded, its registry will not be deleted, making it load again after a server restart.
 
 ## Pending
 - Optimization to the ClaimManager class to better handle a large amount of claims.
