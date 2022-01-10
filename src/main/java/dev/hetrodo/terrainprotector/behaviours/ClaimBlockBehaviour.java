@@ -4,9 +4,12 @@ import dev.hetrodo.terrainprotector.TerrainProtector;
 import dev.hetrodo.terrainprotector.dataTypes.classes.Vector3;
 import dev.hetrodo.terrainprotector.dataTypes.enums.MsgType;
 import dev.hetrodo.terrainprotector.misc.Util;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -49,7 +52,7 @@ public class ClaimBlockBehaviour {
     public static boolean validateExplosionEvent(Vector3 position, Location location, List<Block> blockList) {
         double distance = TerrainProtector.CLAIM_MANAGER.NearestAreaDistance(position);
 
-        boolean cancelEvent = distance < 16;
+        boolean cancelEvent = distance < TerrainProtector.CONFIG_SUPPLIER.ExplosionProtectionDistance.get();
         if (cancelEvent) AreaExplosionBehaviour.Handle(location, blockList);
 
         return cancelEvent;
@@ -82,11 +85,23 @@ public class ClaimBlockBehaviour {
         if (!itemMeta.hasDisplayName())
             return;
 
-        String displayName = itemMeta.getDisplayName();
+        Component displayNameComponent = itemMeta.displayName();
+
+        if (displayNameComponent == null)
+            return;
+
+        String displayName = PlainComponentSerializer.plain().serialize(displayNameComponent);
 
         Player memberPlayer = Util.Or(
                 () -> Bukkit.getServer().getPlayer(displayName),
-                () -> Bukkit.getServer().getOfflinePlayer(displayName).getPlayer()
+                () -> {
+                    OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayerIfCached(displayName);
+
+                    if (offlinePlayer == null)
+                        return null;
+                    else
+                        return offlinePlayer.getPlayer();
+                }
         );
 
         if (memberPlayer == null) {

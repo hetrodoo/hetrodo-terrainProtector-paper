@@ -9,6 +9,7 @@ public class ConfigSupplier extends Config {
     public final Supplier<Integer> MaxClaims;
     public final Supplier<Integer> SizeFactor;
     public final Supplier<String> ClaimBlock;
+    public final Supplier<Integer> ExplosionProtectionDistance;
 
     public ConfigSupplier(String pathName) {
         super(pathName);
@@ -17,5 +18,6 @@ public class ConfigSupplier extends Config {
         this.MaxClaims = Config.buildSupplier(Integer.class, this, "MaxClaims", 5);
         this.SizeFactor = Config.buildSupplier(Integer.class, this, "SizeFactor", 2);
         this.ClaimBlock = Config.buildSupplier(String.class, this, "ClaimBlock", "WHITE_BANNER");
+        this.ExplosionProtectionDistance = Config.buildSupplier(Integer.class, this, "ExplosionProtectionDistance", 64);
     }
 }

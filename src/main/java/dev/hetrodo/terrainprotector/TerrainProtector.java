@@ -3,6 +3,7 @@ package dev.hetrodo.terrainprotector;
 import dev.hetrodo.terrainprotector.behaviours.ClaimManager;
 import dev.hetrodo.terrainprotector.events.EventListener;
 import dev.hetrodo.terrainprotector.misc.ConfigSupplier;
+import dev.hetrodo.terrainprotector.misc.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,10 @@ public final class TerrainProtector extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        TerrainProtector.CLAIM_MANAGER.Save();
+        try {
+            TerrainProtector.CLAIM_MANAGER.Save();
+        } catch (NoClassDefFoundError e) {
+            Util.Println("[FATAL] Failed to unload.");
+        }
     }
 }

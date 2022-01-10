@@ -25,7 +25,7 @@ public class AreaExplosionBehaviour {
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
 
         oldBlocks.sort(Comparator.comparingInt(o -> o.position.y));
-        AreaExplosionBehaviour.RevertBlockChange(world, oldBlocks, 0);
+        if (oldBlocks.size() > 0) AreaExplosionBehaviour.RevertBlockChange(world, oldBlocks, 0);
     }
 
     private static void RevertBlockChange(World world, List<OldBlock> oldBlockList, int index) {
@@ -34,10 +34,11 @@ public class AreaExplosionBehaviour {
         Material material = Material.getMaterial(oldBlock.material);
 
         if (material != null) {
-            world.getBlockAt(oldBlock.position.x, oldBlock.position.y, oldBlock.position.z).setType(material);
+            Block block = world.getBlockAt(oldBlock.position.x, oldBlock.position.y, oldBlock.position.z);
+            if (block.getType().equals(Material.AIR)) block.setType(material);
         }
 
-        if (index < oldBlockList.size()) {
+        if (index < oldBlockList.size() - 1) {
             Util.ExecuteRunnable(() -> {
                 AreaExplosionBehaviour.RevertBlockChange(world, oldBlockList, index + 1);
                 return true;

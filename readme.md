@@ -1,6 +1,6 @@
 # Terrain Protector
 The terrain Protector is a paper plugin that protects a user defined area, no one besides the area owner and its members will be allowed to do anything there. 
-#### Tested on a spigot-1.16.R3 server.
+#### Tested on a paper-1.16.5-794 server.
 
 ## Usage
 - Craft a **White Banner**
