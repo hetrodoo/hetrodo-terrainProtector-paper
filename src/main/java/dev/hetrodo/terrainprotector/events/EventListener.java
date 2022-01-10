@@ -1,6 +1,7 @@
 package dev.hetrodo.terrainprotector.events;
 
 import dev.hetrodo.terrainprotector.TerrainProtector;
+import dev.hetrodo.terrainprotector.behaviours.AreaExplosionBehaviour;
 import dev.hetrodo.terrainprotector.dataTypes.classes.Vector3;
 import dev.hetrodo.terrainprotector.dataTypes.enums.MsgType;
 import dev.hetrodo.terrainprotector.misc.Util;
@@ -14,7 +15,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -131,7 +131,12 @@ public class EventListener implements Listener {
         Vector3 position = new Vector3(x, y, z);
 
         double distance = TerrainProtector.CLAIM_MANAGER.NearestAreaDistance(position);
-        event.setCancelled(distance < 16);
+        boolean cancelEvent = distance < 16;
+
+        if (cancelEvent) {
+            event.setCancelled(true);
+            AreaExplosionBehaviour.Handle(event.getBlock().getLocation(), event.blockList());
+        }
     }
 
     @EventHandler
@@ -142,7 +147,13 @@ public class EventListener implements Listener {
         Vector3 position = new Vector3(x, y, z);
 
         double distance = TerrainProtector.CLAIM_MANAGER.NearestAreaDistance(position);
-        event.setCancelled(distance < 16);
+
+        boolean cancelEvent = distance < 16;
+
+        if (cancelEvent) {
+            event.setCancelled(true);
+            AreaExplosionBehaviour.Handle(event.getLocation(), event.blockList());
+        }
     }
 
     @EventHandler

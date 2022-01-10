@@ -1,9 +1,13 @@
 package dev.hetrodo.terrainprotector.misc;
 
+import dev.hetrodo.terrainprotector.TerrainProtector;
 import dev.hetrodo.terrainprotector.dataTypes.enums.MsgType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 public class Util {
     private static final String Prefix = "[TerrainProtector]";
@@ -28,5 +32,20 @@ public class Util {
         }
 
         player.sendMessage(result);
+    }
+
+    public static void ExecuteRunnable(@NotNull Callable<Boolean> func, @NotNull Long delay) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!func.call()) {
+                        throw new Exception("Runnable execution failed.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.runTaskLater(TerrainProtector.Instance, delay);
     }
 }

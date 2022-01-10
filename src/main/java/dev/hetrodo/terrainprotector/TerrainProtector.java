@@ -7,11 +7,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TerrainProtector extends JavaPlugin {
     public static final ClaimManager CLAIM_MANAGER = new ClaimManager();
+    public static TerrainProtector Instance;
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents(new EventListener(), this);
+        Instance = this;
         TerrainProtector.CLAIM_MANAGER.Load();
+        Bukkit.getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 
     @Override
