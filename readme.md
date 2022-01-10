@@ -23,3 +23,6 @@ The terrain Protector is a paper plugin that protects a user defined area, no on
 
 ## Contributing
 PRs are welcome, if you see something that could be better we can discuss it.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
