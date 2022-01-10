@@ -49,13 +49,9 @@ public class ClaimBlockBehaviour {
         return false;
     }
 
-    public static boolean validateExplosionEvent(Vector3 position, Location location, List<Block> blockList) {
+    public static boolean validateExplosionEvent(Vector3 position) {
         double distance = TerrainProtector.CLAIM_MANAGER.NearestAreaDistance(position);
-
-        boolean cancelEvent = distance < TerrainProtector.CONFIG_SUPPLIER.ExplosionProtectionDistance.get();
-        if (cancelEvent) AreaExplosionBehaviour.Handle(location, blockList);
-
-        return cancelEvent;
+        return distance < TerrainProtector.CONFIG_SUPPLIER.ExplosionProtectionDistance.get();
     }
 
     public static boolean validateDestroyEvent(Player player, Vector3 position) {

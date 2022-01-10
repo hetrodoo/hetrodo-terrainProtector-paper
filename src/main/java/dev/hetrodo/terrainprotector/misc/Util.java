@@ -36,21 +36,6 @@ public class Util {
         player.sendMessage(result);
     }
 
-    public static void ExecuteRunnable(@NotNull Callable<Boolean> func, @NotNull Long delay) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!func.call()) {
-                        throw new Exception("Runnable execution failed.");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.runTaskLater(TerrainProtector.Instance, delay);
-    }
-
     public static <T> T Or(Supplier<@Nullable T> v0, Supplier<@Nullable T> v1) {
         @Nullable T value = v0.get();
 

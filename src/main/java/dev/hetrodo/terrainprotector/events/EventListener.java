@@ -40,15 +40,13 @@ public class EventListener implements Listener {
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
         Vector3 position = Vector3.FromBlock(event.getBlock());
-        boolean result = ClaimBlockBehaviour.validateExplosionEvent(position, event.getBlock().getLocation(), event.blockList());
-        event.setCancelled(result);
+        event.setCancelled(ClaimBlockBehaviour.validateExplosionEvent(position));
     }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         Vector3 position = Vector3.FromBlock(event.getEntity().getLocation().getBlock());
-        boolean result = ClaimBlockBehaviour.validateExplosionEvent(position, event.getLocation(), event.blockList());
-        event.setCancelled(result);
+        event.setCancelled(ClaimBlockBehaviour.validateExplosionEvent(position));
     }
 
     @EventHandler
